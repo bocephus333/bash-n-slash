@@ -1,7 +1,19 @@
 #! /usr/bin/env bash
 
-nc0() {
-  ncat -p -l -v 3333 -e /bin/bash
+help() {
+  # This prints a help page which provides a list of options.
+  HELP_MESSAGE='This is a place holder for the real help message.'
+  printf "%s" "${HELP_MESSAGE}"
 }
 
-nc0 "${@}"
+main() {
+  while getopts "h" OPTION; do
+    case "${OPTION}" in
+      h)
+        help
+        exit 1;;
+    esac
+  done
+}
+
+main "${@}"
