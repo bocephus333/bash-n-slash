@@ -1,0 +1,61 @@
+#!/bin/bash
+
+
+#This is a way that players could connect via netcat
+
+int () {
+	ifconfig | awk '/inet addr/{print substr ($2,6)}'|grep -v 127
+}
+
+addr () {
+printf "\n\nYour address is "
+int
+
+sleep 2
+printf "\nLet the other player know your ip address.\nOnce you have their ip address, type it in.\n"
+read plyrip
+ansr
+	ansr () {
+		printf "\n\nIs $plyrip correct? [Y/n]"
+		read ans
+		case "${ans}" in
+			Y|y|yes|Yes|YES)
+				plyrip=$plyrip;;
+			N|n|no|No|NO)
+				addr;;
+			*)
+				ansr;;
+		esac
+		}
+}
+addr
+ansr
+
+#This is an example on how players would send and receive moves.
+
+	moves () {
+		printf "\n\nWhich directory would you like to attack?\n"
+		printf "1. /etc/home\n"
+		printf "2. /var\n"
+		printf "3. /bin/bash\n"
+		read movex
+			case "{$movex}" in
+				1)
+				 movex="/etc/home";;
+				2)
+				 movex='/var';;
+				3)
+				 movex='/bin/bash';;
+				*)
+				 moves;;
+			esac
+
+	send () {
+	printf $movex > mv.txt
+	cat mv.txt | nc -v -l -p 3333
+	}
+}
+moves
+send
+
+
