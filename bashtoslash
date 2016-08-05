@@ -1,20 +1,36 @@
 #!/bin/bash
 
 
-#This is a way that players could connect via netcat
+help() {
+  # This prints a help page which provides a list of options.
+  HELP_MESSAGE='This is a place holder for the real help message.'
+  printf "%s" "${HELP_MESSAGE}"
+}
+
+main() {
+  while getopts "h" OPTION; do
+    case "${OPTION}" in
+      h)
+        help
+        exit 1;;
+    esac
+  done
+  
+  #This is a way that players could connect via netcat
 
 int () {
 	ifconfig | awk '/inet addr/{print substr ($2,6)}'|grep -v 127
 }
-
+reset
 addr () {
 printf "\n\nYour address is "
 int
 
-sleep 2
+sleep 1.5
 printf "\nLet the other player know your ip address.\nOnce you have their ip address, type it in.\n"
 read plyrip
-ansr
+reset
+  ansr
 	ansr () {
 		printf "\n\nIs $plyrip correct? [Y/n]"
 		read ans
@@ -27,35 +43,51 @@ ansr
 				ansr;;
 		esac
 		}
+reset
 }
 addr
 ansr
 
 #This is an example on how players would send and receive moves.
 
+  first () {
+reset
+    printf "\nWill you be player 1 or player 2?\n"
+    read plyr
+      case "${plyr}" in
+        '1'|p1|player1|Player1|'player 1'|'Player 1')
+          moves;;
+        '2'|p2|player2|Player2|'Player 2'|'player 2')
+          nc -l -v -p $plyrip 3333;;
+      esac
+      }
+  
+    
 	moves () {
+reset
 		printf "\n\nWhich directory would you like to attack?\n"
 		printf "1. /etc/home\n"
 		printf "2. /var\n"
 		printf "3. /bin/bash\n"
 		read movex
-			case "{$movex}" in
-				1)
-				 movex="/etc/home";;
-				2)
-				 movex='/var';;
-				3)
-				 movex='/bin/bash';;
-				*)
-				 moves;;
+			case "${movex}" in
+				1) movex="/etc/home";;
+				2) movex="/var";;
+				3) movex="/bin/bash";;
+				*) printf "Are you quite sure what you just typed?\n\n    ";;
 			esac
-
+      
 	send () {
-	printf $movex > mv.txt
-	cat mv.txt | nc -v -l -p 3333
+		printf $movex > mv.txt
+		cat mv.txt | nc -v -l -p 3333
 	}
 }
+first
+sleep 2
 moves
 send
+}
+
+main "${@}"
 
 
