@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#This is the network library.
+
+
+#This is a function that outputs the executor's ip address in a LAN leaving out the loopback address.
+#myaddr is a function that states the user's ip address.
+#The player would share this address with the other player.
+#(needs to be tested on machines with multiple network interface cards.)
+
+myip () {
+	ifconfig | awk '/inet addr/{print substr ($2,6)}'|grep -v 127
+}
+
+#This function helps to coordinate players ip addresses. 
+
+myaddr () {
+	printf "\n\nYour address is " myip
+	printf "\nLet the other player know your ip address.\nOnce you have their ip address, type it in.\n"
+	read adverseip
+		ansr () {
+			printf "\n\nIs $plyrip correct? [Y/n]"
+			read ans
+				case "${ans}" in
+					Y|y|yes|Yes|YES)
+						plyrip=$plyrip;;
+					N|n|no|No|NO)
+						addr;;
+					*)
+						ansr;;
+				esac
+				}
+}
+
+
+
+#This function will send a text file with a variable's value.
+#this is an offensive
+
+sendmove () {
+		printf $movex > mv.txt
+		cat mv.txt | nc -v -l -p 3333
+	}
+
+#This function should receive the offensive move. adverseip is the other player's ip.
+
+recmove () {
+	while true; do
+	nc $adverseip 3333 > mv.txt
+	sleep 100
+	done &
+}
