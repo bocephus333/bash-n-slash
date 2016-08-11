@@ -19,11 +19,11 @@ myaddr () {
 	printf "\nLet the other player know your ip address.\nOnce you have their ip address, type it in.\n"
 	read adverseip
 		ansr () {
-			printf "\n\nIs $plyrip correct? [Y/n]"
+			printf "\n\nIs $adverseip correct? [Y/n]"
 			read ans
 				case "${ans}" in
 					Y|y|yes|Yes|YES)
-						plyrip=$plyrip;;
+						adverseip=$adverseip;;
 					N|n|no|No|NO)
 						addr;;
 					*)
